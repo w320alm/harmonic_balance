@@ -80,21 +80,23 @@ def harmonic_deriv(omega, r):
     >>> x = sp.array([sin(omega*t)])
     >>> v = sp.array([omega*cos(omega*t)])
     >>> states = sp.append(x,v,axis = 0)
-    >>> state_derives = _harmonic_deriv(omega,states)
+    >>> state_derives = harmonic_deriv(omega,states)
     >>> plt.plot(t,states.T,t,state_derives.T,'x')
+    [<matplotlib.line...]
     '''
     n = r.shape[1]
-    omega_half = sp.arange((n-1)/2+1) * omega * 1j
+    omega_half = -sp.arange((n-1)/2+1) * omega * 2j/(n-2)
     omega_whole = sp.append(sp.conj(omega_half[-1:0:-1]), omega_half)
     r_freq = fftp.fft(r)
     s_freq = r_freq * omega_whole
-    s = -fftp.ifft(s_freq)/(n-2)*2
+    s = fftp.ifft(s_freq)
     return sp.real(s)
 
 
 if __name__ == "__main__":
     import doctest
-    doctest.testmod(optionflags=doctest.ELLIPSIS|doctest.NORMALIZE_WHITESPACE)
+    doctest.testmod(optionflags=doctest.ELLIPSIS |
+                    doctest.NORMALIZE_WHITESPACE)
     # import vibration_toolbox as vtb
 
     # doctest.run_docstring_examples(frfest,globals(),optionflags=doctest.ELLIPSIS)
