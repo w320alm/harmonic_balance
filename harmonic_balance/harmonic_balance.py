@@ -5,7 +5,8 @@ import scipy.fftpack as fftp
 
 
 def harmonic_balance_so(sdfunc, x0, omega, method, *kwargs, num_harmonics=1):
-    '''Harmonic balance solver for second order ODEs.
+    r'''Harmonic balance solver for second order ODEs.
+
     Obtains the solution of a second order differential equation under the
     presumption that the solution is harmonic.
 
@@ -13,7 +14,6 @@ def harmonic_balance_so(sdfunc, x0, omega, method, *kwargs, num_harmonics=1):
     response of a second order linear ordinary differential
     equation defined by
     :math:`\ddot{\mathbf{x}}=f(\mathbf{x},\mathbf{v},\omega)`.
-    `
 
     Parameters
     ----------
@@ -46,21 +46,22 @@ def harmonic_balance_so(sdfunc, x0, omega, method, *kwargs, num_harmonics=1):
 
 
 def harmonic_deriv(omega, r):
-    '''Derivative of a harmonic function using frequency methods
+    '''Derivative of a harmonic function using frequency methods.
+
     Returns the derivatives of a harmonic function
 
     Parameters
     ----------
     omega: float
         Fundamendal frequency, in rad/sec, of repeating signal
-    r: ndarray
+    r: array
         | Array of rows of time histories to take the derivative of.
         | The 1 axis (each row) corresponds to a time history.
         | The length of the time histories *must be an odd integer*.
 
     Returns
     -------
-    s: ndarray
+    s: array
         array of function derivatives.
         The 1 axis (each row) corresponds to a time history.
 
@@ -93,15 +94,41 @@ def harmonic_deriv(omega, r):
     return sp.real(s)
 
 
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod(optionflags=doctest.ELLIPSIS |
-                    doctest.NORMALIZE_WHITESPACE)
-    # import vibration_toolbox as vtb
+def somf(x, v, M, C, K, F):
+    """Acceleration of second order linear matrix system.
 
-    # doctest.run_docstring_examples(frfest,globals(),optionflags=doctest.ELLIPSIS)
-    # doctest.run_docstring_examples(asd,globals(),optionflags=doctest.ELLIPSIS)
-    """ What this does.
+    Parameters
+    ----------
+    x, v, F : arrays
+        :math:`n\\times 1` arrays of current displacement, velocity, and Force.
+    M, C, K : arrays
+        Mass, damping, and stiffness matrices.
+
+    Returns
+    -------
+    a : array
+        :math:`n\\times 1` acceleration vector
+
+    Example
+    -------
+    >>> import scipy as sp
+    >>> M = sp.array([[2,0],[0,1]])
+    >>> K = sp.array([[2,-1],[-1,3]])
+    >>> C = 0.01 * M + 0.01 * K
+    >>> x = sp.array([[1],[0]])
+    >>> v = sp.array([[0],[10]])
+    >>> F = v * 0.1
+    >>> a = somf(x, v, M, C, K, F)
+    array([[-0.95],
+       [ 0.6 ]])
+    """
+
+    return -sp.linalg.inv(M) @ (C @ v + K @ x)
+
+
+if __name__ == "__main__":
+    """Run doctests.
+
     python (name of this file)  -v
     will test all of the examples in the help.
 
@@ -111,3 +138,11 @@ if __name__ == "__main__":
     See the doctest section of the python manual.
     https://docs.python.org/3.5/library/doctest.html
     """
+
+    # import vibration_toolbox as vtb
+
+    # doctest.run_docstring_examples(frfest,globals(),optionflags=doctest.ELLIPSIS)
+    # doctest.run_docstring_examples(asd,globals(),optionflags=doctest.ELLIPSIS)
+    import doctest
+    doctest.testmod(optionflags=doctest.ELLIPSIS |
+                    doctest.NORMALIZE_WHITESPACE)
