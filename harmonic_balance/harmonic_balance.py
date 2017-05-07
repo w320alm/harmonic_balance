@@ -1,5 +1,6 @@
 import scipy as sp
 import scipy.fftpack as fftp
+import scipy.linalg as la
 # from scipy import pi, sin,cos
 # import matplotlib.pyplot as plt
 
@@ -123,7 +124,7 @@ def somf(x, v, M, C, K, F):
        [ 0.6 ]])
     """
 
-    return -sp.linalg.inv(M) @ (C @ v + K @ x)
+    return -la.solve(M, C @ v + K @ x)
 
 
 if __name__ == "__main__":
