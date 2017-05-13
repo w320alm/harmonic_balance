@@ -142,15 +142,19 @@ def hb_so_err(x, **kwargs):
     x : array
         x is an :math:`n \\times m` by 1 array of presumed displacements. Here
         :math:`n` is the number of displacements and :math:`m` is the number of
-        times at which the displacement is guessed (minimum of 3 for an
-        :math:`n` degree of freedom system)
+        times per cycle at which the displacement is guessed (minimum of 3)
 
     **kwargs : string, float, variable
-        **kwargs is a packed set of keyword arguments with two required
-        arguments. The first is `function` which is a string name of the
-        function which returned the numerically calculated acceleration. The
-        second is omega which is the defined fundamental harmonic at which the
-        solution is desired.
+        **kwargs is a packed set of keyword arguments with 3 required
+        arguments.
+            1. `function`: a string name of the
+            function which returned the numerically calculated acceleration.
+
+            2. `omega`: which is the defined fundamental harmonic
+            at which the is desired.
+
+            3. `n_har`: an integer representing the number of harmonics. Note
+            that `m` above is equal to 1 + 2 * `n_har`.
 
     Returns
     -------
@@ -173,6 +177,21 @@ def hb_so_err(x, **kwargs):
            :math:`n \\times m` by 1 and returned as the vector error used by
            the numerical algebraic equation solver.
     """
+
+    n_har = kwargs['n_har']
+    omega = kwargs['omega']
+    function = kwargs['function']
+    m = 1 + 2 * n_har
+    x = x.reshape([-1, m])
+    vel = harmonic_deriv(omega, x)
+    accel = harmonic_deriv(omega, vel)
+    accel_num = accel * 0
+
+    for i in sp.arange(m):
+        accel_num[:, i] = globals()[function](x[:, i], vel[:, i], kwargs)
+
+    e = (accel_num - accel).reshape([-1, 1])
+    return e
 
 
 if __name__ == "__main__":
