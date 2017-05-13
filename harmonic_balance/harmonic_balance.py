@@ -124,7 +124,55 @@ def somf(x, v, M, C, K, F):
        [ 0.6 ]])
     """
 
-    return -la.solve(M, C @ v + K @ x)
+    return -la.solve(M, C @ v + K @ x - F)
+
+
+def hb_so_err(x, **kwargs):
+    """Array (vector) of hamonic balance second order algebraic errors.
+
+    Given a set of second order equations
+    :math:`\ddot{x} = f(x, \dot{x}, \omega, t)`
+    calculate the error :math:`E = \ddot{x} - f(x, \dot{x}, \omega, t)`
+    presuming that :math:`x` can be represented as a Fourier series, and thus
+    :math:`\dot{x}` and :math:`\ddot{x}` can be obtained from the Fourier
+    series representation of :math:`x`.
+
+    Parameters
+    ----------
+    x : array
+        x is an :math:`n \\times m` by 1 array of presumed displacements. Here
+        :math:`n` is the number of displacements and :math:`m` is the number of
+        times at which the displacement is guessed (minimum of 3 for an
+        :math:`n` degree of freedom system)
+
+    **kwargs : string, float, variable
+        **kwargs is a packed set of keyword arguments with two required
+        arguments. The first is `function` which is a string name of the
+        function which returned the numerically calculated acceleration. The
+        second is omega which is the defined fundamental harmonic at which the
+        solution is desired.
+
+    Returns
+    -------
+    e : array
+        2d numpy vector array of numerical error of presumed solution(s) `x`
+
+    Notes
+    -----
+    `function` and `omega` are not separately defined arguments so as to enable
+    algebraic solver functions to call `hb_so_err` cleanly.
+
+    The algorithm is as follows:
+        1. The vector `x` is reshaped into an :math:`n` by :math:`m` array
+        2. The velocity and accelerations are calculated in the same shape as
+           `x` as `vel` and `accel`.
+        3. Each column of `x` and `v` are sent with `t`, `omega`, and other
+           `**kwargs** are sent to `function` one at a time with the results
+           agregated into the columns of `accel_num`.
+        4. The difference between `accel_num` and `accel` is reshaped to be
+           :math:`n \\times m` by 1 and returned as the vector error used by
+           the numerical algebraic equation solver.
+    """
 
 
 if __name__ == "__main__":
