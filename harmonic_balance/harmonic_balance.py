@@ -186,7 +186,7 @@ def hb_so_err(x, **kwargs):
     x = x.reshape([-1, m])
     vel = harmonic_deriv(omega, x)
     accel = harmonic_deriv(omega, vel)
-    accel_num = accel * 0
+    accel_num = sp.zeros_like(accel)
 
     for i in sp.arange(m):
         accel_num[:, i] = globals()[function](x[:, i], vel[:, i], kwargs)
@@ -194,6 +194,16 @@ def hb_so_err(x, **kwargs):
     e = (accel_num - accel).reshape(sp.size(x))
 
     return e
+
+"""
+optimizer will actually be solver from scipy.optimize
+from scipy.optimize
+Say:
+newton_krylov
+broyden1
+https://docs.scipy.org/doc/scipy/reference/optimize.nonlin.html
+
+"""
 
 
 if __name__ == "__main__":
