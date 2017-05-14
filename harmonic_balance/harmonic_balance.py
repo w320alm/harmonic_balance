@@ -140,7 +140,8 @@ def hb_so_err(x, **kwargs):
     Parameters
     ----------
     x : array
-        x is an :math:`n \\times m` by 1 array of presumed displacements. Here
+        x is an :math:`n \\times m` by 1 array of presumed displacements. It
+        must be a "list" array (not a linear algebra vector). Here
         :math:`n` is the number of displacements and :math:`m` is the number of
         times per cycle at which the displacement is guessed (minimum of 3)
 
@@ -190,7 +191,8 @@ def hb_so_err(x, **kwargs):
     for i in sp.arange(m):
         accel_num[:, i] = globals()[function](x[:, i], vel[:, i], kwargs)
 
-    e = (accel_num - accel).reshape([-1, 1])
+    e = (accel_num - accel).reshape(sp.size(x))
+
     return e
 
 
