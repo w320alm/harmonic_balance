@@ -179,13 +179,10 @@ def hb_so_err(x, **kwargs):
            the numerical algebraic equation solver.
     """
 
-    print('does reziging actually have to happen?')
-
     n_har = kwargs['n_har']
     omega = kwargs['omega']
     function = kwargs['function']
     m = 1 + 2 * n_har
-    x = x.reshape([-1, m])
     vel = harmonic_deriv(omega, x)
     accel = harmonic_deriv(omega, vel)
     accel_num = sp.zeros_like(accel)
@@ -193,7 +190,7 @@ def hb_so_err(x, **kwargs):
     for i in sp.arange(m):
         accel_num[:, i] = globals()[function](x[:, i], vel[:, i], kwargs)
 
-    e = (accel_num - accel).reshape(sp.size(x))
+    e = (accel_num - accel)
 
     return e
 
