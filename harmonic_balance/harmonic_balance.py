@@ -190,7 +190,7 @@ def hb_so_err(x, **kwargs):
     for i in sp.arange(m):
         accel_num[:, i] = globals()[function](x[:, i], vel[:, i], kwargs)
 
-    e = (accel_num - accel)
+    e = accel_num - accel
 
     return e
 
