@@ -179,6 +179,8 @@ def hb_so_err(x, **kwargs):
            the numerical algebraic equation solver.
     """
 
+    print('does reziging actually have to happen?')
+
     n_har = kwargs['n_har']
     omega = kwargs['omega']
     function = kwargs['function']
