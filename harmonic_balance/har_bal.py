@@ -4,9 +4,13 @@ import scipy.linalg as la
 # from scipy import pi, sin,cos
 # import matplotlib.pyplot as plt
 
+__all__ = ["harmonic_balance_so",
+           "harmonic_deriv",
+           "somf"]
+
 
 def harmonic_balance_so(sdfunc, x0, omega, method, *kwargs, num_harmonics=1):
-    r'''Harmonic balance solver for second order ODEs.
+    r"""Harmonic balance solver for second order ODEs.
 
     Obtains the solution of a second order differential equation under the
     presumption that the solution is harmonic.
@@ -20,7 +24,7 @@ def harmonic_balance_so(sdfunc, x0, omega, method, *kwargs, num_harmonics=1):
     ----------
     sdfunc: str
         name of function that returns second derivative given omega and
-        *kwargs
+        \*kwargs
         :math:`\ddot{\mathbf{x}}=f(\mathbf{x},\mathbf{v},\omega)`
     omega:  float
         assumed fundamental response frequency.
@@ -29,14 +33,14 @@ def harmonic_balance_so(sdfunc, x0, omega, method, *kwargs, num_harmonics=1):
     x0: ndarray
         n x m array where n is the number of equations and m is the number of
         values representing the repeating solution.
-        It is required that m = 1 + 2 * num_harmonics.
+        It is required that :math:`m = 1 + 2  num_{harmonics}`.
     method: str
         Name of optimization method to be used.
 
     Returns
     -------
     t, x, v, a : ndarrays
-    '''
+    """
 
     '''
     a) define a function that returns errors in time domain as vector
@@ -44,6 +48,8 @@ def harmonic_balance_so(sdfunc, x0, omega, method, *kwargs, num_harmonics=1):
     and frequencies.
     c)
     '''
+
+    return
 
 
 def harmonic_deriv(omega, r):
@@ -73,6 +79,7 @@ def harmonic_deriv(omega, r):
     Examples
     --------
     >>> import matplotlib.pyplot as plt
+    >>> from har_bal import *
     >>> import scipy as sp
     >>> from scipy import pi,sin,cos
     >>> f = 2

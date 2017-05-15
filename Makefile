@@ -7,7 +7,7 @@
 
 # I don't know what the following line means/does
 #export TEST_ARGS=--exe -v --with-doctest
-export NAME=vibration_toolbox
+export NAME=harmonic_balance
 
 export GHP_MSG="Generated gh-pages for `git log master -1 --pretty=short --abbrev-commit`"
 export VERSION=`python -c "import $(NAME); print($(NAME).__version__)"`
