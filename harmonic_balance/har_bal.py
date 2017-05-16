@@ -53,7 +53,7 @@ def harmonic_balance_so(sdfunc, x0, omega, method, *kwargs, num_harmonics=1):
 
 
 def harmonic_deriv(omega, r):
-    '''Derivative of a harmonic function using frequency methods.
+    """Derivative of a harmonic function using frequency methods.
 
     Returns the derivatives of a harmonic function
 
@@ -92,7 +92,8 @@ def harmonic_deriv(omega, r):
     >>> state_derives = harmonic_deriv(omega,states)
     >>> plt.plot(t,states.T,t,state_derives.T,'x')
     [<matplotlib.line...]
-    '''
+    """
+
     n = r.shape[1]
     omega_half = -sp.arange((n-1)/2+1) * omega * 2j/(n-2)
     omega_whole = sp.append(sp.conj(omega_half[-1:0:-1]), omega_half)
